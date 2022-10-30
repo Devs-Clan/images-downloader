@@ -23,7 +23,7 @@ def search_term() -> str:
     return search_term        
 
 
-def search_in_google(driver: Driver, search_term: str):
+def search_in_google(driver: Driver, search_term: str) -> None:
     driver.get('https://www.google.com')
     driver.maximize_window()   
     input = driver.find_element_by_xpath("//input[@name='q']")
