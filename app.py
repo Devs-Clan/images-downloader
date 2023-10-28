@@ -1,15 +1,18 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from chrome import ChromeConfig 
-from time import sleep
-from datetime import datetime
-import urllib.request
 import os
+
+import urllib.request
+from datetime import datetime
+from time import sleep
+
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.webdriver import WebDriver
+from driver import Driver
+
 
 GOOGLE_PATH = r'https://www.google.com'
 
 
-def main():
+def main() -> None:
     search_term = input("Object to download: ")
     if search_term not in os.listdir(os.path.join(os.getcwd(), 'data-set')):
         print(f'Creating folder with the name: {search_term}')
@@ -17,13 +20,11 @@ def main():
     else:
         print(f'NOTE: new data will added to exsisting directory named: {search_term}')
 
-    options = ChromeConfig(webdriver.ChromeOptions())
-    driver = webdriver.Chrome(options=options)
-   
-    download_from_google(driver=driver, search_term=search_term)
+    chrome_driver = Driver().driver
+    download_from_google(driver=chrome_driver, search_term=search_term)
 
 
-def download_from_google(driver, search_term):
+def download_from_google(driver: WebDriver, search_term: str) -> None:
     driver.get(GOOGLE_PATH)
     driver.maximize_window()
     
@@ -42,6 +43,7 @@ def download_from_google(driver, search_term):
         src = image.get_attribute('src')
         current_datetime = datetime.now().strftime(f'%d-%m-%Y, %H:%M:%S')
         urllib.request.urlretrieve(src, f"data-set/{search_term}/{current_datetime}.jpg")
+
 
 if __name__ == "__main__":
     main()  
